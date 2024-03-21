@@ -16,7 +16,7 @@ date: 2024-02-28
 last_modified_at: 2024-02-29
 ---
 
-![image](assets/images/sopt-34기-결과.png)
+![image](assets/img/sopt-34기-결과.png)
 
 # 🔥지원한 이유
 다양한 사람들이 가진 지식을 공유하고, 이를 통해 학습하고, 부족한 경험을 쌓아보고자, NOW SOPT 34기에 지원했다.

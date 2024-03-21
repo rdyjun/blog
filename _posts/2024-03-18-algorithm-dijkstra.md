@@ -26,7 +26,7 @@ last_modified_at: 2024-03-18
 
 # 흐름
 ## 노드간 비용 초기화
-![img](../assets/images/dijkstra-1.png)
+![img](../assets/img/dijkstra-1.png)
 
 위와 같은 그래프를 2차원 배열로 초기화 했을 때 아래와 같은 표가 그려진다.
 
@@ -59,7 +59,7 @@ private int[][] initializeGraph(int nodeCount, int[][] nodes) {
 
 ## 시작점 정하기
 이제 시작점을 고르면 된다. 여기서는 시작 노드를 1로 하겠다.
-![img](../assets/images/dijkstra-2.png)
+![img](../assets/img/dijkstra-2.png)
 
 시작 노드를 정했다면 그래프에서 해당 시작점의 행을 가져오면 된다.
 | \ |1|2|3|4|5|6|
@@ -80,6 +80,11 @@ boolean[] visited = new boolean[n];
 
 1. 방문하지 않았으면서, 비용이 **가장 작은** 노드를 먼저 찾는다.
     > 위 상황에서는 비용이 4인 2번 노드가 된다.
+    ```java
+    private findMinNode(int[][] graph) {
+        
+    }
+    ```
 
 2. 1번에서 찾은 노드의 다음 노드를 찾는다.
     > 2번 노드의 다음 노드는 1, 3, 4번 노드이다.
@@ -94,7 +99,7 @@ boolean[] visited = new boolean[n];
     > 1번 노드에서 4번 노드로 가는 비용은 0으로 아직 방법이 없다.
     > 결론적으로 1번 노드에서 3번 노드와 4번노드를 가는 비용을 업데이트 한다.
 
-![img](../assets/images/dijkstra-3.png)
+![img](../assets/img/dijkstra-3.png)
 
 | \ |1|2|3|4|5|6|
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|
@@ -106,7 +111,7 @@ boolean[] visited = new boolean[n];
 모든 노드를 방문할 때까지 또는 원하는 노드를 방문할 때 까지 위 과정을 반복하면 된다.
 여기서는 모든 노드의 경로를 찾을 때 까지 반복하겠다.
 
-![img](../assets/images/dijkstra-4.png)
+![img](../assets/img/dijkstra-4.png)
 
 | \ |1|2|3|4|5|6|
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|
@@ -119,7 +124,7 @@ boolean[] visited = new boolean[n];
 > 반복문을 통해 작은 수부터 검사했기 때문이다.
 > 이 순서는 크게 중요하지 않다.
 
-![img](../assets/images/dijkstra-5.png)
+![img](../assets/img/dijkstra-5.png)
 
 | \ |1|2|3|4|5|6|
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|
@@ -127,7 +132,7 @@ boolean[] visited = new boolean[n];
 |**비용**|0|4|5|6|5|10|
 |**방문여부**|✅|✅|✅|❌|✅|❌|
 
-![img](../assets/images/dijkstra-6.png)
+![img](../assets/img/dijkstra-6.png)
 
 | \ |1|2|3|4|5|6|
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|
@@ -135,7 +140,7 @@ boolean[] visited = new boolean[n];
 |**비용**|0|4|5|6|5|9|
 |**방문여부**|✅|✅|✅|✅|✅|❌|
 
-![img](../assets/images/dijkstra-7.png)
+![img](../assets/img/dijkstra-7.png)
 
 | \ |1|2|3|4|5|6|
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|
