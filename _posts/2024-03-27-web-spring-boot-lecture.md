@@ -108,6 +108,7 @@ DB에 값을 저장하거나 가져오기 위해 `JDBC`, `Mybatis`, `JPA` 등을
 `Bussiness Layer - Service Implementations` -> `DAO Interface` -> `DAO Implementations` -> `Database`
 
 # Layer별 bean 객체 선언 Annotaion
+
 |어노테이션    |위치           |의미                              |
 |-----------|--------------|---------------------------------|
 |@Service   |xxxServiceImpl|비즈니스 로직을 처리하는 Service 클래스  |
