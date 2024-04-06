@@ -1,7 +1,7 @@
 ---
 title: "[알고리즘] 다익스트라 알고리즘"
 author: rdyjun
-excerpt: "최단 경로 탐색을 위한 알고리즘"
+excerpt: "한 노드에서 다른 노드들로의 최단 경로 탐색을 위한 알고리즘"
 
 categories: [알고리즘]
 tags: [java, dijkstra, algorithm, 자바, 다익스트라, 알고리즘]
