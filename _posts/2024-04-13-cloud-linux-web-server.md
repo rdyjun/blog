@@ -302,10 +302,238 @@ vi /etc/apache2/sites-available/000-default.conf
       JkMount /* ajp13_worker # 2번에 나온 Tomcat 별명(ajp13_worker)
 ```
 
+설정 변경 후 재시작
+
+```bash
+sudo systemctl restart apache2
+```
+
 ### 4. 확인
 
 ```bash
-vi /etc/apache2/mods-available/jk.conf
+cat /etc/apache2/mods-available/jk.conf
+cat /etc/apache2/mods-available/jk.laod
 ```
 
-...추가중
+### 5. WAS Tomcat에 특정 Port와 특정 Protocol로 오는 요청을 받도록 설정
+
+```bash
+vi /var/lib/tomcat9/conf/server.xml
+```
+
+아래 내용 주석 해제
+
+```xml
+<Connector  protocol="AJP/1.3"
+            port="8009"
+            redirectPort="8443" />
+```
+
+#### 사용자 지정
+
+> +는 새로 추가된 줄로 실제 작성할 때는 +는 무시하자
+
+```xml
+<Connector  protocol="AJP/1.3"
+            address="0.0.0.0"           +
+            port="8009"
+            redirectPort="8443"
+            pacaketsize="65536"         +
+            secretRequired="false" />   +
+```
+
+마찬가지로 설정 변경 후 재시작
+
+```bash
+sudo systemctl restart tomcat9
+```
+
+#### 정상 작동 확인
+
+- 주석만 해제하고 재시작한 경우
+  `http://localhost` 로 접속 시 `service unavailable error, 503 error` 가 뜬다면 정상
+- 주석 제거 후 내용을 추가한 경우
+  `http://localhost` 와 `http://localhost:8080` 의 접속 결과가 동일 - <u>Tomcat 화면</u>
+
+## 여기서 궁금증
+
+1. Apache와 Tomcat이 다른 Server에 있는 경우?
+   - Tomcat의 host를 나타내는 ip인 `127.0.0.1(or localhost)`를 Tomcat 서버의 ip로 변경
+2. Apache와 Tomcat을 연동했는데, http://localhost 했을 때, Tomcat으로 연결이 안되는 경우?
+
+   - `https://`로 한 건 아닌지 확인
+   - `netstat -ntlp` 로 8009 포트가 열려있는지 확인
+   - Tomcat이 구동중인지 `systemctl status tomcat9` 확인
+
+3. `http://localhost:8009` 가 안되는 이유
+
+4. Apache의 DocumentRoot에 있는 index.html이 동작하지 않는 이유
+
+## WAS가 여러 개이고, 각각 다른 App이 있는 경우
+
+```
+        / WAS1
+Apache -  WAS2
+        \ WAS3
+```
+
+### 1. Connector 설정
+
+```bash
+vi /etc/libapache2-mod-jk/workers-properties
+```
+
+```properties
+workers.tomcat_home=/var/lib/tomcat9
+workers.java_home=/usr/lib/jvm/default-java
+
+worker.list=was1,was2,was3
+worker.was1.port=port1(해당 port)
+worker.was1.host=ip1(해당 ip)
+worker.was1.type=ajp13
+
+worker.was2.port=port2(해당 port)
+worker.was2.host=ip2 (해당 ip)
+worker.was2.type=ajp13
+```
+
+### 2. 특정 경로에 각 Tomcat Mount 하기
+
+```bash
+vi /etc/apache2/sites-available/000-default.conf
+```
+
+```conf
+<VirtualHost *:80>
+              ServerName 127.0.0.1
+              ServerAdmin webmaster@localhost
+              DocumentRoot /var/www/html
+              JkMount /app1/* was1
+              JkMount /app2/* was2
+              JkMount /app3/* was3
+</VirtualHost>
+```
+
+여기서 JkMount의 사용법은 `JkMount {URL_PATTERN} {WORKER}` 이다.
+
+- `URL_PATTERN` 주소로 요청이 들어왔을 때 `WORKER`로 보낸다는 의미
+
+#### 여기서 잠깐!
+
+위에서 주석처리 해둔 DocumentRoot를 주석 해제한 이유?
+
+- 서버의 정적 파일을 액세스 하기 위해 DocumentRoot를 사용해야하기 때문이다
+  - 즉, `/app1/*`, `/app2/*`, `/app3/*` 외의 경로로 서버의 정적 파일을 확인하고자 할 때 DocumentRoot 설정이 필요하기 때문이다.
+- 기본 값으로 `/var/ww/html` 를 설정
+- 꼭 DocumentRoot를 설정해야하는 것은 아니다. 위 3가지 경로만 액세스하게 하고싶다면 주석처리된 상태 그대로 두어도 된다.
+
+### 3. 테스트
+
+#### 현재 상태
+
+```
+Linux-1         Linux-2
+apache
+  |   \------▷ Tomcat
+  ▽             WAS-2 = app2
+Tomcat
+ WAS-1 = app1
+```
+
+#### 접속
+
+아래 경로 모두 잘 나오는 것을 확인
+
+1. `http://localhost/`
+2. `http://localhost/app1/`
+3. `http://localhost/app2/`
+4. `http://{1번 LINUX IP}.001/app1/`
+5. `http://{2번 LINUX IP}.001/app2/`
+
+## Load Balancing
+
+- `네트워크 트래픽`을 하나 이상의 `서버`나 `장비`로 분산하기 위해 사용되는 기술이다
+- S/W나 H/W를 통해 로드 밸런싱을 수행할 수 있다.
+- 서비스 사용자의 요청을 서버로 분산해서 전달한다
+
+```
+사용자1 →―――――――――――――┐      ┌――――――→ Tomcat1 (00.00.00.1)
+                      ↓     ↑
+사용자2 →――――――――→ Apache Server ―――→ Tomcat2 (00.00.00.2)
+                   00.00.00.00
+                      ↑     ↓
+사용자3 →―――――――――――――┘      └――――――→ Tomcat3 (00.00.00.3)
+```
+
+### 웹 트래픽 증가에 따른 대응 방법
+
+#### 1. Scale Up
+
+- CPU/RAM/Disk 성능 및 Network 대역폭 등 증가
+- 비싸고 성능이 좋은 서버로 변경
+
+```
+             ┌────┐
+     ┌──┐    │    │
+□ -> └──┘ -> └────┘
+```
+
+#### 2. Scale Out
+
+- 로드 밸런싱과 함께 활용
+- 부하를 처리할 서버 대수를 늘리는 방식
+- 저렴한 서버 여러 대를 이용해 더 많은 부하를 감당한다
+
+```
+ㅁ + ㅁ + ㅁ
+```
+
+- `같은 그룹`에 있는 `서버`들에게 요청이 `정책`에 맞게 골고루 분배될 수 있도록 한다.
+- `같은 그룹`에 있는 `서버`들은 동일한 기능을 `서비스`한다
+
+### 로드 밸런싱 방식
+
+#### 1. Round Robin
+
+- 로드 밸런서에서 서버 선택 시, `순차적`으로 서버를 선택하는 방법
+
+```
+==============================
+          1st Request
+                       apache1
+                      /
+user -> load balancer  apache2
+
+                       apache3
+
+==============================
+          2nd Request
+                       apache1
+
+user -> load balancer ━ apache2
+
+                       apache3
+
+==============================
+          3rd Request
+                       apache1
+
+user -> load balancer  apache2
+                      \
+                       apache3
+==============================
+```
+
+#### 2. Weighted Round Robin
+
+- 로드 밸런서에서 서버 선택 시 `비중`에 따라서 서버를 선택하는 방식
+
+```
+user1                        apache1 (weight 0.5)
+                          /
+user2 ----> load balancer    apache2 (weight 0.2)
+
+user3                        apache3 (weight 0.3)
+```
+
+추가중...
