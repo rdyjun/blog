@@ -1,5 +1,5 @@
 ---
-title: "스프링 기초"
+title: "스프링 웹 이론 기초"
 excerpt: ""
 
 categories: [웹]
@@ -13,6 +13,168 @@ last_modified_at: 2024-03-26 13:00:00 +0800
 
 pin: false
 ---
+
+# 뷰 템플릿과 MVC 패턴
+
+#### 뷰 템플릿
+
+`웹 페이지(View)`를 하나의 `틀(Template)`로 만들고 여기에 변수를 삽입해 서로 다른 페이지로 보여주는 기술이다
+
+> 예시로는 회원 로그인 시 마이페이지의 구성이 바뀐다는 점이 있다.
+
+## MPA vs SPA
+
+#### MPA - Multi Page Application
+
+클라이언트가 서버에 요청을 보냈을 때, 서버에서 html 코드를 반환한다
+
+#### SPA - Single Page Application
+
+클라이언트가 서버에 요청을 보냈을 때, 서버에서 페이지에 필요한 키와 키에 대한 값을 반환한다
+
+## 자바 웹 프로그래밍 기술의 발전 흐름
+
+- Servlet -> HTML 코드 출력 문제 해결 -> JSP
+- JSP -> 불필요한 코드의 반복 해결 -> JSP MVC 모델
+- JSP MVC 모델 -> 규격화/모듈화 -> 스프링
+- 스프링 -> 더 간단하게 설정 -> 스프링 부트
+
+```
+┌────────────── 스프링 부트 ──────────────┐
+|                 스프링 　      　   ───────── 스프링 컨테이너
+|                                        |
+|      ┌────── JSP MVC 모델 ──────┐ 　　　|
+|      |           JSP            |      |
+|      |                      ──────────────── 서블릿 컨테이너
+|      |      ┌───Servlet───┐     |      |
+|      |      |             |     |      |
+|      |      |   ┌─JDK─┐   |     |      |
+|      |      |   |   ──────────────────────── JVM
+|      |      |   └─────┘   |     |      |
+|      |      └─────────────┘     |      |
+|      └──────────────────────────┘      |
+|                                        |
+└────────────────────────────────────────┘
+```
+
+## MVC 패턴
+
+MVC 패턴의 최대 장점은 사용자에게 보여지는 `프레젠테이션 영역`과 `비즈니스 로직`, `데이터 구조`가 서로 완전히 `분리`되어있다는 점이다
+
+#### 모델 1
+
+```
+Client -> Server -> JSP(View & Controller) -> JavaBean(Model & Controller) -> DB -> 이후 역순
+```
+
+#### 모델 2
+
+```
+1 Client -> 2 Server -> 3 Servlet(Controller) <-> 4 JavaBean(Model)
+　　↑　　　　　　　　　　　　　　　 └> 5 JSP(View) -> 6 JavaBean(Model) -> 7 DB
+    └────────────── 8 ───────────────────┘
+```
+
+|                         | 모델1             | 모델2                                        |
+| ----------------------- | ----------------- | -------------------------------------------- |
+| 컨트롤러와 뷰 분리 여부 | 통합 (JSP 파일)   | 분리 (JSP, Servlet)                          |
+| 장점                    | 쉽고 빠른 개발    | 디자이너/개발자 분업 유리<br>유지보수에 유리 |
+| 단점                    | 유지보수가 어렵다 | 설계가 어렵다<br>개발 난이도가 더 높다       |
+
+## 서블릿 동작
+
+웹 서버 <---> WAS <---> java_file
+
+#### 모델1 동작
+
+1. Web Server
+2. login.jsp 실행
+3. login_jsp.java로 변환
+4. login_jsp.class로 컴파일
+
+#### 모델2 동작
+
+1. login.java 실행
+2. login.class로 컴파일
+
+### 서블릿 컨테이너 동작 방식
+
+#### 1. Xml 설정 파일에 등록
+
+1. `WEB-INF/web.xml` 파일을 로딩하여 구동
+
+   ```xml
+   <web-app>
+      <servlet>
+         <servlet-name>example</servlet-name>
+         <servlet-class>example.ExampleServlet</servlet-class>
+      </servlet>
+
+      <servlet-mapping>
+        <servlet-name>example</servlet-name>
+        <url-pattern>/example</url-pattern>
+    </servlet-mapping>
+   </web-app>
+   ```
+
+2. 브라우저로부터 `/example` 요청 수신
+3. 해당 Servlet 클래스(예시: example.ExampleServlet)를 찾아 객체 생성 후 doGet() 메소드 호출
+4. doGet() 메소드 실행 결과를 클라이언트 브라우저로 전송
+
+#### 2. 클래스 파일에 어노테이션 표기
+
+```java
+@WebServlet("/example.do")
+or
+@WebServlet(name="action", urlPatterns={"example.do"})
+```
+
+### 서블릿 클래스 파일 위치
+
+```
+C:/apache-tomcat9.0.33/webapps/ROOT/WEB-INF/classes/ExampleServlet.class
+```
+
+## 엔터프라이즈급 어플리케이션
+
+- 개발을 위한 API
+
+#### 1. 분산형/기업형 응용프로그램
+
+- 결합력을 낮추는 DI, Transaction 처리, 로그 처리 등
+
+#### 2. 일반적인 로컬 응용프로그램
+
+- 파일 I/O, 콘솔 I/O, 윈도우 I/O, 네트워크 I/O, Thread 등
+
+## 프레임워크 개요
+
+- Framework는 어플리케이션을 개발할 때, 아키텍처에 해당하는 골격 코드를 제공한다.
+- Solution이 완제품이라면 Framework는 반제품에 해당한다.
+
+### 장점
+
+#### 1. 빠른 구현 시간
+
+- 개발자는 비즈니스 로직만 구현하면 되므로 제한된 시간 내에 많은 기능을 구현할 수 있다.
+
+#### 2. 쉬운 관리
+
+- 같은 프레임워크가 적용된 어플리케이션은 아키텍쳐가 같으므로 관리가 수월
+- 유지보수의 시간도 절약
+
+#### 3. 개발자들의 역량 획일화
+
+- 숙련된 개발자와 초급 개발자가 생성한 코드가 비슷해진다.
+
+#### 4. 검증된 아키텍쳐의 재사용과 일관성 유지
+
+### Spring Framework
+
+- 로드 존슨이 2004년에 만든 오픈소스 프레임워크
+- `IoC`와 `AOP`를 지원하는 경량의 프레임 워크
+- JAVA개발을 편하게 해주는 오픈 소스 프레임워크
+- 객체지향에 충실한 설계가 가능함
 
 # 스프링 콘셉트
 
