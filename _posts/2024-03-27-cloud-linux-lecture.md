@@ -33,6 +33,94 @@ pin: false
 - 원격지의 PC(Telnet Client)에서 리눅스 서버에 접속하면 서버에서 직접 작업하는 것과 동일하게 작업 가능
 - 23번 port 사용
 
+## 텔넷 서버 구축 과정
+
+### 1. 텔넷 서버 설치
+
+```bash
+apt-get install xinetd telnetd
+```
+
+### 2. 설정 파일 편집
+
+```bash
+touch /etc/xinetd.d/telnet
+
+vi /etc/xinetd.d/telnet
+```
+
+```
+service telnet
+{
+  disable = no
+  flags = REUSE
+  socket_type = stream
+  wait = no
+  user = root
+  server = /usr/sbin/in.telnetd
+  log_on_failure += USERID
+}
+```
+
+### 3. 재시작 및 기타 설정
+
+```bash
+sudo systemctl restart xinetd # 재시작
+
+sudo systemctl enable xinetd # 재부팅 시에도 자동 실행
+
+sudo systemctl status xinetd # 상태 확인 정상 = active (running)
+```
+
+### 4. 방화벽 열기
+
+```bash
+ufw allow 23/tcp
+```
+
+### 5. 텔넷 서버 연결 확인
+
+서버와의 연결 상태를 확인할 수 있음
+
+```bash
+ping -c 3 {서버 IP} # 3번만 확인
+or
+ping {서버 IP} # 계속 확인
+```
+
+```
+Ping 192.000.000.000 (192.000.000.000) 56(84) byrtes of data.
+64 bytes from 192.000.000.000: icmp_seq=1 ttl=64 time=0.645 ms
+64 bytes from 192.000.000.000: icmp_seq=2 ttl=64 time=0.441 ms
+64 bytes from 192.000.000.000: icmp_seq=3 ttl=64 time=0.453 ms
+
+--- 192.000.000.000 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2056ms
+rtt min/avg/max/mdev = 0.441/0.513/0.645/0.093 ms
+```
+
+#### ttl - Time To Live
+
+이 패킷이 살아있는 시간 (라우터를 거치는 횟수, 또 다른 network로 이동한 횟수)
+기본값은 정해져 있고, 하나의 라우터를 거치느 동안 그 수만큼 차감된다.
+0이되면 패킷은 소멸
+
+#### rtt - Round Trip Time
+
+왕복 시간
+
+### 6. 서버 접속
+
+```bash
+telent 192.000.000.000 # 접속
+
+whoami  # 접속된 사용자 이름 확인 - teluser
+
+exit    # 접속 종료
+
+logout  # 마찬가지 접속 종료
+```
+
 # OpenSSH
 
 ### SSH(Secure Shell Protocl)
