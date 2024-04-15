@@ -1,7 +1,6 @@
 ---
 layout: compress
 ---
-
 <!doctype html>
 
 {% include origin-type.html %}
@@ -44,9 +43,7 @@ layout: compress
               {% include {{ _include_path }} lang=lang %}
             {% endfor %}
 
-            <div class="access">
-              {% include visited-count.html %}
-            </div>
+            {% include visited-count.html %}
           </aside>
         </div>
 
