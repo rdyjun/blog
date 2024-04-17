@@ -14,7 +14,7 @@ last_modified_at: 2024-04-13 20:00:00 +0800
 pin: false
 ---
 
-# WAS server와 WAS
+# Web server와 WAS
 
 - Web Server의 역할
   - static resource
@@ -120,7 +120,6 @@ chmod 755 /home/abc/html/index.html
 
 #### 문제 1. Permission 오류
 
-2-1. Permission 오류
 ![alt text](/assets/img/apache-2.png)
 
 #### 문제 2. DocumentRoot를 바꿨음에도 이전 페이지가 나올 경우
