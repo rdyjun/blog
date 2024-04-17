@@ -93,9 +93,9 @@ netstat -ntlp
 vi /etc/apache2/sites-available/000-default.conf
 ```
 
-```bash
-> Server webmaster@localhost
-> DocumentRoot /var/www/html # 이 부분 수정
+```conf
+Server webmaster@localhost
+DocumentRoot /var/www/html # 이 부분 수정
 ```
 
 재시작
