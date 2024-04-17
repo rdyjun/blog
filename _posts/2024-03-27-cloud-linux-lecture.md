@@ -271,7 +271,7 @@ filezilla
 사용자명: Server id
 비밀번호: 사용자에 따른 비밀번호
 포트: 21
-![alt text](image.png)
+![alt text](/assets/img/filezilla-2.png)
 
 #### 5-3. 파일 다운로드
 

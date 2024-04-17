@@ -14,18 +14,17 @@ last_modified_at: 2024-04-13 20:00:00 +0800
 pin: false
 ---
 
-# WAS server와 WAS
+# Web server와 WAS
 
 - Web Server의 역할
   - static resource
     - <u>Web Server</u>에서 `static resource`를 다루고,
       <u>WAS Server</u>에서 `dynamic resource`를 다룬다.
-- Security
-  - <u>방화벽 바깥</u>에 `Web Server`를 위치하고 `WAS`, `DB서버`는 <u>방화벽 안쪽</u>에 위치
-  - SSL 처리
-- Load balancing
-
-  - 하나의 web server가 여러 개의 WAS 서버에게 업무 분배
+  - Security
+    - <u>방화벽 바깥</u>에 `Web Server`를 위치하고 `WAS`, `DB서버`는 <u>방화벽 안쪽</u>에 위치
+    - SSL 처리
+  - Load balancing
+    - 하나의 web server가 여러 개의 WAS 서버에게 업무 분배
 
 - Web Server의 장점
   - Static resource 처리를 빨리 해준다
@@ -94,9 +93,9 @@ netstat -ntlp
 vi /etc/apache2/sites-available/000-default.conf
 ```
 
-```bash
-> Server webmaster@localhost
-> DocumentRoot /var/www/html # 이 부분 수정
+```conf
+Server webmaster@localhost
+DocumentRoot /var/www/html # 이 부분 수정
 ```
 
 재시작
@@ -120,7 +119,6 @@ chmod 755 /home/abc/html/index.html
 
 #### 문제 1. Permission 오류
 
-2-1. Permission 오류
 ![alt text](/assets/img/apache-2.png)
 
 #### 문제 2. DocumentRoot를 바꿨음에도 이전 페이지가 나올 경우
