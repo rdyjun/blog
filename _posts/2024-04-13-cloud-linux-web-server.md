@@ -535,4 +535,16 @@ user2 ----> load balancer    apache2 (weight 0.2)
 user3                        apache3 (weight 0.3)
 ```
 
-추가중...
+# 3 Tier Architecture
+
+1. Presentation Tier
+
+2. Service Logic Tier
+
+3. Data Tier
+
+### 장점
+
+1. 각 계층이 분리되어 있어, 업무 분담이 가능하므로 업무 효율이 증가된다.
+2. 각 계층을 서로 다른 서버로 나누기 때문에 서버의 부하를 줄일 수 있다.
+3. 합리적인 Scale-Up이 가능하다.
