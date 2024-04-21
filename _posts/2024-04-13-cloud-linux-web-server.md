@@ -17,6 +17,7 @@ pin: false
 # Web server와 WAS
 
 - Web Server의 역할
+
   - static resource
     - <u>Web Server</u>에서 `static resource`를 다루고,
       <u>WAS Server</u>에서 `dynamic resource`를 다룬다.
@@ -185,7 +186,7 @@ sudo systemctl status tomcat9
 
 Tomcat-admin - GUI 관리도구
 
-- Tmcat에 app을 deploy, 설정 변경
+- Tomcat에 app을 deploy, 설정 변경
 - `localhost:8080/manager`
 
 #### manager 페이지를 위한 권한 부여
@@ -245,7 +246,7 @@ ls /var/lib/tomcat9/work/Catalina/localhost
 Apache <-> Connector <-> Tomcat
 
 1. apache-tomcat connector에 Tomcat들의 별명을 지어주고, 정보 설정
-   - Connector 설정 파일 - `/etc/libapache2-mod-jk/workers.properties
+   - Connector 설정 파일 - `/etc/libapache2-mod-jk/workers.properties`
      - <u>Tomcat</u>의 `home directory`, `port`, `통신 protocol`을 설정
 2. Web Server Apache에 apache-tomcat connector에 설정된 Tomcat으로 요청을 보내도록 설정(별명 사용)
    - `/etc/apache2/sites-available/000-default.conf`
@@ -445,8 +446,8 @@ Tomcat
 1. `http://localhost/`
 2. `http://localhost/app1/`
 3. `http://localhost/app2/`
-4. `http://{1번 LINUX IP}.001/app1/`
-5. `http://{2번 LINUX IP}.001/app2/`
+4. `http://{apache PC IP}.001/app1/`
+5. `http://{apache PC IP}.001/app2/`
 
 ## Load Balancing
 
