@@ -192,6 +192,10 @@ Tomcat-admin - GUI 관리도구
 #### manager 페이지를 위한 권한 부여
 
 ```bash
+vi /var/lib/tomcat9/conf/tomcat-users.xml
+```
+
+```xml
 <role rolename="manager-gui" />
 <user username="myid" password="mypassword" rolename="manager-gui" />
 ```
