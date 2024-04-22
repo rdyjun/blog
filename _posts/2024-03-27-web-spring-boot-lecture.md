@@ -137,7 +137,7 @@ C:/apache-tomcat9.0.33/webapps/ROOT/WEB-INF/classes/ExampleServlet.class
 
 ## 엔터프라이즈급 어플리케이션
 
-- 개발을 위한 API
+엔터프라이즈급 응용프로그램 개발을 위한 API의 중요한 요소에 대한 설명
 
 #### 1. 분산형/기업형 응용프로그램
 
