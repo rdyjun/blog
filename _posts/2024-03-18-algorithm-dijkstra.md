@@ -12,7 +12,7 @@ toc_sticky: true
 date: 2024-03-18 11:30:00 +0800
 last_modified_at: 2024-03-18 11:30:00 +0800
 
-pin: true
+pin: false
 ---
 
 다익스트라(Dijkstra)는 최단 경로 탐색 문제에서 사용되는 알고리즘으로,

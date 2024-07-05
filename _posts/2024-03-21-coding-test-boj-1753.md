@@ -3,7 +3,18 @@ title: "[백준] 1753번 최단경로 #JAVA"
 excerpt: "다익스트라 알고리즘을 활용한 단방향 최단 경로 찾기 문제"
 
 categories: [코딩 테스트]
-tags: [java, dijkstra, algorithm, 자바, 다익스트라, 알고리즘, priority queue, queue, 우선순위 큐]
+tags:
+  [
+    java,
+    dijkstra,
+    algorithm,
+    자바,
+    다익스트라,
+    알고리즘,
+    priority queue,
+    queue,
+    우선순위 큐
+  ]
 
 toc: true
 toc_sticky: true
@@ -11,23 +22,24 @@ toc_sticky: true
 date: 2024-03-21 13:30:00 +0800
 last_modified_at: 2024-03-21 13:30:00 +0800
 
-pin: true
+pin: false
 ---
 
 # 문제
+
 https://www.acmicpc.net/problem/1753
 
 # 풀이
-최단 경로 탐색 문제기 때문에 다익스트라 방식으로 풀었다. 
+
+최단 경로 탐색 문제기 때문에 다익스트라 방식으로 풀었다.
 
 처음엔 int[][] 배열을 사용해서 graph를 작성했다가, 시간초과가 떠서 HashMap을 사용하고, 좀 더 줄일 수 있을 것 같아 검색해보니, List를 사용하는 것이 더 효율적일 것 같아 결과적으로 이중 List를 사용했다.
 
 ## 흐름
+
 값들을 모두 입력 받아, 각 노드의 거리를 담은 `graph`와 시작점으로 부터 다른 노드까지의 거리를 담는 `distance`를 초기화 해줬다.
 `graph`는 `List<List<Node>>`로 해주었기 때문에 따로 `Integer.MAX_VALUE` 설정은 해주지 않았고, `distance`만 `Integer.MAX_VALUE` 설정을 해주었다.
 그 다음 다익스트라 알고리즘을 통해 우선 순위 큐에서 비용이 가장 적은 노드를 꺼내어 해당 노드가 갈 수 있는 노드의 비용을 `graph list`에서 꺼내, `distance`에 기록된 비용과 비교해 더 작다면 업데이트 해주었다.
-
-
 
 ```java
 import java.io.BufferedReader;
@@ -211,4 +223,5 @@ class IO {
 ```
 
 # 결론
+
 다익스트라 알고리즘을 사용해 큰 어려움 없이 풀었으나, 메소드를 역할에 따라 나누고, 코드를 깨끗하게 작성하려고 하다 보니 시간이 걸렸다. 이번 문제에서는 n x n 배열과 Map, List를 각각 사용해보면서 List가 더 빠른 것을 체감할 수 있었다.
