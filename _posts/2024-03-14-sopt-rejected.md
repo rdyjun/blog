@@ -13,6 +13,7 @@ date: 2024-02-28 16:30:00 +0800
 last_modified_at: 2024-02-29 16:30:00 +0800
 
 pin: false
+published: false
 ---
 
 ![image](assets/img/sopt-34기-결과.png)

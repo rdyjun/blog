@@ -13,6 +13,7 @@ date: 2024-02-28 18:00:00 +0800
 last_modified_at: 2024-02-29 18:00:00 +0800
 
 pin: false
+published: false
 ---
 
 ## 📛 네이밍
