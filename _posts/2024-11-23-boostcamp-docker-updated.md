@@ -43,6 +43,126 @@ Docker Hub에 push하는 빌드 흐름을 가져가기로 했다.
 > 2024-11-18 프론트엔드 도커 배포 방식 -> 정적 파일로 변경  
 > 2024-12-12 프론트엔드/백엔드 전체 재배포 -> 독립적 배포 파이프라인 분리
 
+### 수정된 GitHub Actions 스크립트
+
+아래는 수정 전 GitHub Actions 스크립트이다.  
+단순하게 SSH를 통해 클라우드 서버에 접근한 후 git pull로 프로젝트 최신 커밋을 내려받고  
+클라우드 서버에 저장된 ./deploy.sh만 실행하면 끝이었다.
+
+```yml
+name: Docker Image CD
+
+on:
+  push:
+    branches: ["dev"]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      # SSH 접속을 위한 SSH 키 설정
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # 원격 서버의 SSH 호스트 키를 신뢰할 수 있는 목록에 추가
+      - name: Add known hosts
+        run: ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      # 서버에서 파일을 최신화 하고, 배포 스크립트를 통해 실제 배포 진행
+      - name: Deploy with Docker Compose on server
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          cd /${{ secrets.SSH_USER }}/web18-inear
+          git pull origin dev
+          cd ${{ secrets.SCRIPT_PATH }}
+          ./deploy.sh
+          EOF
+```
+
+위 스크립트에서 클라이언트 프로젝트와 서버 프로젝트를 도커 이미지로 빌드하고,  
+도커 허브에 업로드 및 클라우드 서버에서 내려받는 과정을 추가했다.
+
+빌드 과정이 GitHub Actions로 옮겨지면서 서버 실행 테스트를 해볼 수 있을 것 같아,  
+서버 및 클라이언트 도커 이미지를 토대로 도커 컴포즈 파일을 실행하여 정상 실행 여부를 확인하는 과정을 추가했다.
+
+```yml
+name: Docker Image CD
+
+on:
+  push:
+    branches: ["dev"]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      # 소스 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Docker Hub 로그인
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # 서버 이미지 빌드 및 태그 지정
+      - name: Build and tag Docker image
+        run: |
+          docker build -f server/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/inear-server:${{ github.sha }} ./
+          docker tag ${{ secrets.DOCKER_USERNAME }}/inear-server:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/inear-server:latest
+
+      # 클라이언트 이미지 빌드 및 태그 지정
+      - name: Build and tag client image
+        run: |
+          docker build -f client/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/inear-client:${{ github.sha }} ./
+          docker tag ${{ secrets.DOCKER_USERNAME }}/inear-client:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/inear-client:latest
+
+      # Docker Compose로 전체 애플리케이션 빌드 및 실행 (테스트용)
+      - name: Run Docker Compose for testing
+        run: |
+          docker compose -f docker-compose-blue.yml up --build -d
+        continue-on-error: false
+
+      # 서버 이미지 푸시 (Docker Hub 또는 다른 레지스트리)
+      - name: Push server image to Docker Hub
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/inear-server:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/inear-server:latest
+
+      # 클라이언트 이미지 푸시 (Docker Hub 또는 다른 레지스트리)
+      - name: Push client image to Docker Hub (optional)
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/inear-client:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/inear-client:latest
+
+      # SSH 접속을 위한 SSH 키 설정
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # 원격 서버의 SSH 호스트 키를 신뢰할 수 있는 목록에 추가
+      - name: Add known hosts
+        run: ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      # 서버에서 파일을 최신화 하고, 배포 스크립트를 통해 실제 배포 진행
+      - name: Deploy with Docker Compose on server
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} " \
+            mkdir -p /${{ secrets.SSH_USER }}/web18-inear-test && \
+            cd /${{ secrets.SSH_USER }}/web18-inear-test && \
+            docker pull ${{ secrets.DOCKER_USERNAME }}/inear-server:latest && \
+            docker pull ${{ secrets.DOCKER_USERNAME }}/inear-client:latest && \
+            ./deploy.sh
+          "
+```
+
 ## 문제 해결 과정
 
 ### 이미지를 어떻게 올리지?
