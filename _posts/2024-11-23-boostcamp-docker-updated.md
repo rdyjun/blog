@@ -15,51 +15,7 @@ last_modified_at: 2024-11-23 23:17:00 +0800
 pin: false
 ---
 
-```mermaid
-
-%% graph TD
-flowchart
-    %% Main Components
-    GH[(GitHub)]
-    GA[(GitHub Actions)]
-    HUB[(Docker Hub)]
-    NC[ncloud]
-    NGINX[NGINX]
-
-    %% Deployment Flow
-    GH -->|PR & Push| GA
-    GA --> CLIENT(client file build)
-    GA -->|server Image Push| HUB
-    GA -->|dist scp| NC
-    GA -->|SSH| NC
-    HUB -->|Image Pull| NC
-
-    NC -->|run| CHECK{deploy.sh}
-    NC -->|dist file update & change| DIST_BLUE[Dist-New]
-    CHECK -->|if Green server already running| BLUE[New Server Compose]
-    BLUE -->|build & health check| BLUE_SERVER[(New Server:3000)]
-
-    NGINX -->|nginx root path update| DIST_BLUE
-    NGINX -->|server port change| BLUE_SERVER
-    CHECK -->|if sub server healthy, stop and remove existing server| GREEN_SERVER[(Already running Server:3000)]
-
-    %% Nginx Reload
-    CHECK -->|nginx reload| NGINX
-
-    %% Styling
-    classDef github fill:#000000,stroke:#000000,color:#FFFFFF
-    classDef hub fill:#0DB7ED,stroke:#0DB7ED,color:#FFFFFF
-    classDef nginx fill:#019639,stroke:#009639,color:#FFFFFF
-    classDef server fill:#1F1F1F,stroke:#1F1F1F,color:#FFFFFF
-    classDef NC fill:#31D494, stroke: #31D494, color: #FFFFFF
-
-
-    class GH github
-    class HUB hub
-    class NGINX nginx
-    class BLUE_SERVER,GREEN_SERVER server
-    class NC NC
-```
+![배포 아키텍처](https://github.com/user-attachments/assets/37cda675-2eb6-43f5-aa3c-64e28a225da2)
 
 > 위는 리팩토링 이후 배포 상태이다.
 
