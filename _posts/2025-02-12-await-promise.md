@@ -94,7 +94,7 @@ test() // 호출 즉시 Promise<pending> 반환 - P1
 
 앞전의 코드를 예시로 `a()` 함수에서 `asyncFunction()` 함수를 호출할 때 `await`을 쓴 상황을 살펴보자.
 
-![await을 사용했을 때 동작흐름](https://github.com/user-attachments/assets/bb218ce6-81d2-45cc-906c-12872be4ff55)
+![await을 사용했을 때 동작흐름](https://github.com/user-attachments/assets/1b71e4bc-f2ac-4210-a246-9b7a9bf01d87)
 
 ```jsx
 async function asyncFunction() {
@@ -153,7 +153,7 @@ a();
 
 반대로 await을 쓰지 않는 상황을 보자.
 
-![await을 사용하지 않았을 때 동작흐름](https://github.com/user-attachments/assets/d740bb8f-4f8a-48a7-875d-745084c631f3)
+![await을 사용하지 않았을 때 동작흐름](https://github.com/user-attachments/assets/cbecd6e7-88ca-486c-b89b-2dd5103f0c59)
 
 ```jsx
 async function asyncFunction() {
