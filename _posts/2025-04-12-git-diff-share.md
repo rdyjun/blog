@@ -47,16 +47,22 @@ pin: false
 다음은 patch 파일을 기기간에 공유하는 방식이다.  
 순서는 아래와 같다.
 
+0. 만약 tracking 되지 않는 파일이 있는 경우 git add 를 수행한다. \* 추가됨
+   > 여기서 git add를 수행하는 이유는 Tracking되지 않는 파일은 diff에 보이지 않기 때문이다.
 1. 기존 기기에서 `git diff > changes.patch`
 2. 다른 기기의 프로젝트 루트 디렉토리에 `changes.patch` 파일 전달
    > 꼭 루트 디렉토리가 아니어도 된다.
 3. 다른 기기에서 `git apply changes.patch` 실행
    > 프로젝트 루트 디렉토리가 아닌 다른 위치라면  
    > `git apply {경로}/changes.patch`로 수정한다.
+4. 3번의 기기에서 `git reset HEAD` 실행
+   > git add로 git stage에 올라간 파일을 git stage에서 제거하는 명령이다.
+   > 기존 git log를 건드리지 않고 stage에 올라간 파일만 stage에서 내린다.
 
 이 방식은 간단하게 수정사항만 저장하는 파일이기에 용량이 적다.  
 이런 특징 덕에 빠르게 파일을 옮기고 작업을 이어나갈 수 있다.
 
 ## 🏁 결론
 
-강제 병합의 위험성을 방지하고, 간단한 프로세스를 위해 patch방식을 사용하는 것이 적합해보인다.
+강제 병합의 위험성을 방지하고, 간단한 프로세스를 위해 patch방식을 사용하는 것이 적합해보인다.  
+Untracked 파일의 경우 꼭 `git add` 및 `git reset`을 수행해주어야 한다는 점을 인지해야 한다.
