@@ -14,9 +14,9 @@ last_modified_at: 2025-07-15 17:55:00 +0900
 pin: false
 ---
 
-https://castle-of-gyu.tistory.com/87
-
-https://github.com/querydsl/querydsl/issues/3428
+> 참고 사이트  
+> https://castle-of-gyu.tistory.com/87  
+> https://github.com/querydsl/querydsl/issues/3428
 
 ## 문제 정의
 
