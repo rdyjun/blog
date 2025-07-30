@@ -23,10 +23,11 @@ https://github.com/querydsl/querydsl/issues/3428
 QueryDSL을 사용해서 각 행으로 분리된 권한 데이터를 List로 합치는 과정에서 아래와 같은 문제에 직면했다.
 
 > 예를 들어, 아래와 같이 테이블이 있을 경우 권한 부분을 합쳐서 가져온다.
-> | 게시글ID | 권한 |
-> | -------- | ---- |
-> | 1 | USER |
-> | 1 | CUSTOMER |
+>
+> | 게시글ID | 권한     |
+> | -------- | -------- |
+> | 1        | USER     |
+> | 1        | CUSTOMER |
 >
 > { ID: 1, Role: [USER, CUSTOMER] }
 
