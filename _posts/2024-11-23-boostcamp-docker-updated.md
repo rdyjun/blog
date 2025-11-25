@@ -1,5 +1,5 @@
 ---
-title: "[Docker] 처음 사용해본 도커로 배포 리팩토링 해보기"
+title: "[Docker] 도커를 이용해서 배포 프로세스를 최적화하자"
 author: rdyjun
 excerpt: "어떻게 기존 배포 방식을 더 효율적으로 개선할까?"
 
