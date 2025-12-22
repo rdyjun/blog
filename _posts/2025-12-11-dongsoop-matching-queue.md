@@ -159,7 +159,50 @@ subscriber는 해당 신호를 받았을 때만 큐를 확인하도록 구현했
 - 불필요한 루프 제거
 - 메인 스레드 점유 문제 해소
 - HTTP 요청과 Socket.IO 이벤트 정상 처리
-- 모든 이벤트가 순서대로 안전하게 처리됨
+- <span style="color:red">~~모든 이벤트가 순서대로 안전하게 처리됨~~</span>
+
+<span style="color:red">모든 이벤트가 순서대로 처리될 것이라고 생각했으나, 그렇지 않았다.</span>
+
+### 안정화
+
+위 구조에서 문제는 2가지이다.
+
+1. while (true)는 문법적으로 종료 구문이 없어 실제 서비스에서 불안할 수 있다고 판단했다.
+2. 동시에 signal이 들어오면 콜백함수가 동시에 처리된다.
+
+이 문제를 다시 해결하기 위해 redis에서 지원하는 blocking pop방식을 사용해 기존 signal 을 제거하고, queue에 작업 목록이 들어올 때까지 대기하도록 구현했다.
+
+여기서 while은 true가 아닌 AbortController를 사용해서 비동기 로직의 종료 시점을 검사하도록 수정했다.
+
+> `signal.aborted`는 `controller.abort()`가 호출되기 전까지 `false`이기 때문에,
+> 현재 구조에서는 `while (true)`와 동작상 큰 차이는 없다.
+> 다만, 중단 가능성을 명시적으로 표현하고 외부 제어 지점을 열어두는 구조이므로,
+> 확장성과 유지보수 측면에서 signal 기반 제어가 더 안전하다고 판단했다.
+
+```jsx
+public initServer(server: Server) {
+    this.server = server;
+
+    const { signal } = new AbortController();
+    this.signal = signal;
+
+    const subscriber = this.redisClient.duplicate();
+    await subscriber.connect();
+
+    while (!this.signal.aborted) {
+        try {
+            const queue = await subscriber.brPop('blinddate:queue', 0);
+            if (!queue?.element) {
+                continue;
+            }
+            await this.process(JSON.parse(queue.element) as JobType);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+}
+
+```
 
 ## 결론
 
