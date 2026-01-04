@@ -507,6 +507,8 @@ health 체크가 `starting`으로 나오던 문제로 확인했다..
 
 그래서 함수를 생성하여 5초 간격으로 health 체크를 하도록 하고, starting이 아닌 상태가 나왔을 때 상태를 반환하기로 했다.
 
+{% raw %}
+
 ```sh
 waiting() {
   while true; do
@@ -521,6 +523,8 @@ waiting() {
   done
 }
 ```
+
+{% endraw %}
 
 결과는 브라우저 환경에서 동적 데이터를 확인할 수 있었다.  
 이에 더해 docker compose 파일에도 재시도 쿨타임을 설정할 수 있다는 것이 기억나서  
