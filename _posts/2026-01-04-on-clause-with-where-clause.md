@@ -4,7 +4,7 @@ author: rdyjun
 excerpt: "LEFT JOIN에서 결과가 달라지는 이유"
 
 categories: [sql]
-tags: [database, sql, postgresql, join, on, where]
+tags: [database, sql, postgresql, join, "on", where]
 
 toc: true
 toc_sticky: true
