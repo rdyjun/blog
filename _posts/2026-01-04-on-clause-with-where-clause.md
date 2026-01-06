@@ -4,7 +4,7 @@ author: rdyjun
 excerpt: "LEFT JOIN에서 결과가 달라지는 이유"
 
 categories: [sql]
-tags: [database, sql, postgresql, join, "on", where"부트캠프후기", "멀티캠퍼스IT부트캠프", "현대이지웰 JAVA 풀스택"]
+tags: [database, sql, postgresql, join, "on", where, "부트캠프후기", "멀티캠퍼스부트캠프", "현대이지웰JAVA풀스택"]
 
 toc: true
 toc_sticky: true
