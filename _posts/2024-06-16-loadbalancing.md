@@ -4,7 +4,7 @@ author: rdyjun
 excerpt: "서버 부하 분산을 위한 로드 밸런싱"
 
 categories: [cloud]
-tags: [loadbalancing, ELB]
+tags: [loadbalancing, elb]
 
 toc: true
 toc_sticky: true
