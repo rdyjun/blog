@@ -13,29 +13,22 @@ image:
   lqip: data:image/webp;base64,UklGRpoAAABXRUJQVlA4WAoAAAAQAAAADwAABwAAQUxQSDIAAAARL0AmbZurmr57yyIiqE8oiG0bejIYEQTgqiDA9vqnsUSI6H+oAERp2HZ65qP/VIAWAFZQOCBCAAAA8AEAnQEqEAAIAAVAfCWkAALp8sF8rgRgAP7o9FDvMCkMde9PK7euH5M1m6VWoDXf2FkP3BqV0ZYbO6NA/VFIAAAA
   alt: Responsive rendering of Chirpy theme on multiple devices.
 
-published: false
----
-
 ## Headings
 
 <!-- markdownlint-capture -->
 <!-- markdownlint-disable -->
-
-# H1 - heading
-
+# H1 — heading
 {: .mt-4 .mb-0 }
 
-## H2 - heading
-
+## H2 — heading
 {: data-toc-skip='' .mt-4 .mb-0 }
 
-### H3 - heading
-
+### H3 — heading
 {: data-toc-skip='' .mt-4 .mb-0 }
 
-#### H4 - heading
-
+#### H4 — heading
 {: data-toc-skip='' .mt-4 }
+<!-- markdownlint-restore -->
 
 <!-- markdownlint-restore -->
 
@@ -80,7 +73,6 @@ Moon
 
 <!-- markdownlint-capture -->
 <!-- markdownlint-disable -->
-
 > An example showing the `tip` type prompt.
 > {: .prompt-tip }
 
@@ -91,8 +83,7 @@ Moon
 > {: .prompt-warning }
 
 > An example showing the `danger` type prompt.
-> {: .prompt-danger }
-
+{: .prompt-danger }
 <!-- markdownlint-restore -->
 
 ## Tables
@@ -109,7 +100,7 @@ Moon
 
 ## Footnote
 
-Click the hook will locate the footnote[^footnote], and here is another footnote[^fn-nth-2].
+Clicking the hook will locate the footnote[^footnote], and here is another footnote[^fn-nth-2].
 
 ## Inline code
 
@@ -123,7 +114,8 @@ Here is the `/path/to/the/file.extend`{: .filepath}.
 
 ### Common
 
-```text
+<!-- markdownlint-disable-next-line MD040 -->
+```
 This is a common code snippet, without syntax highlight and line number.
 ```
 
