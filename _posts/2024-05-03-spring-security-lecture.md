@@ -91,11 +91,11 @@ pw: 랜덤 UUID
 
 > 암호는 프로젝트의 매 실행마다 바뀐다.
 
-![프로젝트 실행 화면](security-1.png)
+![프로젝트 실행 화면](/assets/img/security-1.png)
 
 서버의 컨트롤러에 정의한 특정 경로를 타고 들어가게되면, 아래와 같이 Spring Security에서 제공되는 로그인 폼이 렌더링된다.<br>
 
-![로그인](security-2.png)
+![로그인](/assets/img/security-2.png)
 
 `Username`에는 Spring Security에서 처음 제공해주는 `user`를 입력하고,<br>
 `Password`에는 프로젝트 실행 시 제공받은 키를 입력하자.
