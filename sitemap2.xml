@@ -7,6 +7,7 @@ permalink: /sitemap2.xml
   xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   {% for post in site.posts %}
+  {% unless post.sitemap == false %}
   <url>
     <loc>{{ post.url | absolute_url }}</loc>
     {% if post.last_modified_at %}
@@ -14,16 +15,26 @@ permalink: /sitemap2.xml
     {% elsif post.date %}
     <lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
     {% endif %}
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
+  {% endunless %}
   {% endfor %}
   {% for page in site.pages %}
-  {% if page.url != '/sitemap2.xml' and page.url != '/sitemap.xml' and page.url != '/feed.xml' and page.url != '/robots.txt' %}
+  {% unless page.sitemap == false
+    or page.url contains '/sitemap'
+    or page.url contains '/feed'
+    or page.url == '/robots.txt'
+    or page.url == '/404.html'
+    or page.url contains '/norobots' %}
   <url>
     <loc>{{ page.url | absolute_url }}</loc>
     {% if page.last_modified_at %}
     <lastmod>{{ page.last_modified_at | date_to_xmlschema }}</lastmod>
     {% endif %}
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
   </url>
-  {% endif %}
+  {% endunless %}
   {% endfor %}
 </urlset>

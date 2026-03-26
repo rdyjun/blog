@@ -8,3 +8,4 @@ User-agent: *
 Disallow: /norobots/
 
 Sitemap: {{ '/sitemap.xml' | absolute_url }}
+Sitemap: {{ '/sitemap2.xml' | absolute_url }}
