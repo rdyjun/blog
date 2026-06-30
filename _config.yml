@@ -24,6 +24,7 @@ description: >- # used by seo meta and the atom feed
 # Fill in the protocol & hostname for your site.
 # E.g. 'https://username.github.io', note that it does not end with a '/'.
 url: "https://rdyjun.github.io"
+baseurl: "/blog"
 
 github:
   username: rdyjun
@@ -215,6 +216,7 @@ exclude:
   - purgecss.js
   - "*.config.js"
   - "package*.json"
+  - navered41b7f7b00227343129bc8c546384c4.html
 
 jekyll-archives:
   enabled: [categories, tags]
